@@ -10,17 +10,16 @@ Basic recipe to build an eth2.0 validator node on an Intel NUC running Ubuntu.
 
 Alternatives
 * eth1
-  * [https://twitter.com/sigp_io](@sigp_io)'s
   * go Ethereum
   * OpenEthereum
   * besu
   * turbogeth
   * nethermind
 * eth2.0
-  * [https://twitter.com/sigp_io](@sigp_io)'s Lighthouse
-  * [https://twitter.com/prylabs](@prylabs)'s Prysm
-  * [https://twitter.com/Teku_ConsenSys](@Teku_ConsenSys)'s Teku
-  * [https://twitter.com/ethnimbus](@ethnimbus)'s Nimbus
+  * [@sigp_io](https://twitter.com/sigp_io)'s Lighthouse
+  * [@prylabs](https://twitter.com/prylabs)'s Prysm
+  * [@Teku_ConsenSys](https://twitter.com/Teku_ConsenSys)'s Teku
+  * [@ethnimbus](https://twitter.com/ethnimbus)'s Nimbus
 
 # Prometheus
 
