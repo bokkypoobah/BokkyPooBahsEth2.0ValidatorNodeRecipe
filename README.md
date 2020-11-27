@@ -1,15 +1,37 @@
 # BokkyPooBahs eth 2.0 Validator Node Recipe
 
-
-
-
+**Work in progress**
 
 # Prometheus
 
 https://prometheus.io/
 
-## Install Go
+    mkdir ~/prometheus
+    cd ~/prometheus
+    # Check website for latest version
+    wget https://github.com/prometheus/prometheus/releases/download/v2.23.0/prometheus-2.23.0.linux-amd64.tar.gz
+    # https://prometheus.io/docs/introduction/first_steps/
+    tar xvfz prometheus-*.tar.gz
+    cd prometheus-*
+    ./prometheus --help
+    # Configuration
+    vi prometheus.yml
+    # set scrape_interval: 12s and evaluation_interval: 12s to match slot
+    ./prometheus --config.file=prometheus.yml
+    ssh -nNT -L 9090:192.168.1.133:9090 username@remotehost
+    http://localhost:9090
+    http://localhost:9090/metrics
+    
+    cd ~/prometheus
+    wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
+    tar xvfz node_exporter-*.*-amd64.tar.gz
+    cd node_exporter-*.*-amd64
+    ./node_exporter
+    curl http://localhost:9100/metrics
+    
 
+## Install Go
+Only if building Prometheus from source
 https://golang.org/doc/install
 
     mkdir ~/go
