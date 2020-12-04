@@ -139,6 +139,8 @@ Hit ^C to exit
 
 <hr />
 
+# TODO BELOW
+
 ## lighthouse
 
 sudo useradd -m -s /bin/bash lighthouse
