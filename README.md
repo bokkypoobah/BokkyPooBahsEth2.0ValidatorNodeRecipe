@@ -6,20 +6,7 @@
 
 Basic recipe to build an eth2.0 validator node on an Intel NUC running Ubuntu, using go-ethereum as the eth1 node and Sigma Prime's [https://github.com/sigp/lighthouse](https://github.com/sigp/lighthouse) as the eth2 validator node.
 
-There are other alternatives. See:
-* eth1
-  * go Ethereum
-  * OpenEthereum
-  * besu
-  * turbogeth
-  * nethermind
-* eth2.0
-  * [@sigp_io](https://twitter.com/sigp_io)'s Lighthouse
-  * [@prylabs](https://twitter.com/prylabs)'s Prysm
-  * [@Teku_ConsenSys](https://twitter.com/Teku_ConsenSys)'s Teku
-  * [@ethnimbus](https://twitter.com/ethnimbus)'s Nimbus
-
-Other references of use:
+Other references, including different eth1 and eth2 clients:
 * https://github.com/SomerEsat/ethereum-staking-guide
 
 <br />
@@ -28,7 +15,7 @@ Other references of use:
 
 ## Deposit 32 ETH
 
-See https://launchpad.ethereum.org/
+See https://launchpad.ethereum.org/ . It's now after genesis (01 Dec 2020), so your 32 ETH deposit go into a queue for a period of time before your eth2 validator become active.
 
 <br />
 
