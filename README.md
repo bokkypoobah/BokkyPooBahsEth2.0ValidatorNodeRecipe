@@ -27,6 +27,14 @@ See https://launchpad.ethereum.org/ . It's now after genesis (01 Dec 2020), so y
 
 <br />
 
+## Software
+
+* eth1 - Go Ethereum
+* eth2 - Lighthouse
+* monitoring - Prometheus
+
+<br />
+
 Install RAM and SSD.
 
 Change BIOS settings so NUC powers on by default - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
@@ -35,12 +43,19 @@ Change BIOS settings so NUC powers on by default - https://www.intel.com/content
 
 ## Installing Ubuntu Linux
 
-Ubuntu 20.04 LTS from https://ubuntu.com/
+Ubuntu 20.04 LTS from https://ubuntu.com/ .
 
 <br />
 
-## geth
-https://geth.ethereum.org/docs/install-and-build/installing-geth#install-on-ubuntu-via-ppas
+## Go Ethereum
+
+This is installed for a user `geth` with a home directory `/home/geth'. Go Ethereum data will be located in `/home/geth/.ethereum` .
+
+<br />
+
+### Install Software
+
+Installation from https://geth.ethereum.org/docs/install-and-build/installing-geth#install-on-ubuntu-via-ppas :
 
     sudo add-apt-repository -y ppa:ethereum/ethereum
     sudo apt-get update
@@ -48,6 +63,10 @@ https://geth.ethereum.org/docs/install-and-build/installing-geth#install-on-ubun
     # geth is now installed in /usr/local/bin/geth
 
 Add the user **geth** with a home directory `/home/geth` with the bash shell:
+
+<br />
+
+### Create `geth` User
 
 ```
 sudo useradd -m -s /bin/bash geth
@@ -57,6 +76,12 @@ To log in as the **geth** user:
 
 ```
 sudo su - geth
+```
+
+### Set `geth` As A Systemd Service
+
+
+
 
 
 ## lighthouse
