@@ -78,18 +78,66 @@ Add the user **geth** with a home directory `/home/geth` with the bash shell:
 sudo useradd -m -s /bin/bash geth
 ```
 
-To log in as the **geth** user:
+To log in as the **geth** user (not now, but if you want to check the data):
 
 ```
 sudo su - geth
 ```
 
-### Set `geth` As A Systemd Service
+### Install Go Ethereum As A Systemd Service
 
 ```
-su
+sudo vi /etc/systemd/system/geth.service
+```
 
+Add the following:
 
+```
+[Unit]
+Description=Geth
+
+[Service]
+Type=simple
+User=geth
+ExecStart=/usr/bin/geth --http
+KillMode=process
+TimeoutStopSec=300
+Restart=on-failure
+RestartSec=10s
+
+[Install]
+WantedBy=default.target
+```
+
+Reload the sysmtemd configuration files
+
+```
+sudo systemctl daemon-reload
+```
+
+Enable The Go Ethereum Service
+
+```
+sudo systemctl enable geth
+```
+
+Start The Go Ethereum Service
+
+```
+sudo systemctl start geth
+```
+
+Check the logs for the Go Ethereum Service
+
+```
+journalctl -f -u geth
+```
+
+Hit ^C to exit
+
+<br />
+
+<hr />
 
 ## lighthouse
 
