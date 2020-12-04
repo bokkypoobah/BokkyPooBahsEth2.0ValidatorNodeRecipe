@@ -55,7 +55,7 @@ You will have to give your new computer a `hostname`, a `username` with a `passw
 
 ## Go Ethereum
 
-This is installed for a user `geth` with a home directory `/home/geth'. Go Ethereum data will be located in `/home/geth/.ethereum` .
+This is installed for a user `geth` with a home directory `/home/geth`. Go Ethereum data will be located in `/home/geth/.ethereum`.
 
 <br />
 
