@@ -35,7 +35,11 @@ See https://launchpad.ethereum.org/ . It's now after genesis (01 Dec 2020), so y
 
 <br />
 
+## Install Hardware And System Settings
+
 Install RAM and SSD.
+
+Connect to monitor, keyboard and network.
 
 Change BIOS settings so NUC powers on by default - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
 
@@ -43,7 +47,9 @@ Change BIOS settings so NUC powers on by default - https://www.intel.com/content
 
 ## Installing Ubuntu Linux
 
-Ubuntu 20.04 LTS from https://ubuntu.com/ .
+Install Ubuntu 20.04 LTS from https://ubuntu.com/ .
+
+You will have to give your new computer a `hostname`, a `username` with a `password`.
 
 <br />
 
@@ -80,7 +86,8 @@ sudo su - geth
 
 ### Set `geth` As A Systemd Service
 
-
+```
+su
 
 
 
