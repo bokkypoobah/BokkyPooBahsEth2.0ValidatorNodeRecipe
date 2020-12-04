@@ -4,12 +4,9 @@
 
 **NOTE**: This is my recipe. Use at your own risk. Do your own research.
 
-Basic recipe to build an eth2.0 validator node on an Intel NUC running Ubuntu.
+Basic recipe to build an eth2.0 validator node on an Intel NUC running Ubuntu, using go-ethereum as the eth1 node and Sigma Prime's [https://github.com/sigp/lighthouse](https://github.com/sigp/lighthouse) as the eth2 validator node.
 
-* go-ethereum
-* Sigma Prime's [https://github.com/sigp/lighthouse](https://github.com/sigp/lighthouse)
-
-Alternatives
+There are other alternatives. See:
 * eth1
   * go Ethereum
   * OpenEthereum
@@ -22,15 +19,38 @@ Alternatives
   * [@Teku_ConsenSys](https://twitter.com/Teku_ConsenSys)'s Teku
   * [@ethnimbus](https://twitter.com/ethnimbus)'s Nimbus
 
+Other references of use:
+* https://github.com/SomerEsat/ethereum-staking-guide
+
+<br />
+
+<hr />
+
 ## Deposit 32 ETH
 
+See https://launchpad.ethereum.org/
+
+<br />
 
 ## Hardware
 
+* Intel NUC 10th generation i5 or i7
+* 16 GB RAM minimum
+* 1 TB SSH minimum. eth1 chaindata starts at ~ 300GB and grows about 2GB per day
+
+<br />
+
+Install RAM and SSD.
+
+Change BIOS settings so NUC powers on by default - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
+
+<br />
 
 ## Installing Ubuntu Linux
 
+Ubuntu 20.04 LTS from https://ubuntu.com/
 
+<br />
 
 ## geth
 https://geth.ethereum.org/docs/install-and-build/installing-geth#install-on-ubuntu-via-ppas
@@ -221,3 +241,92 @@ curl localhost:5054/metrics
 
 lighthouse vc --metrics
 curl localhost:5064/metrics
+
+grafana
+
+sudo apt-get update
+sudo apt-get install ssmtp
+
+sudo vi /etc/ssmtp/ssmtp.conf
+
+root=eth2@bok.id.au
+mailhub=mail.bok.id.au:465
+FromLineOverride=YES
+AuthUser=eth2@bok.id.au
+AuthPass=<password>
+UseTLS=YES
+UseSTARTTLS=YES
+
+
+echo "Test SSMTP" | ssmtp eth2@bok.id.au
+
+sudo apt install mailutils
+
+sudo chmod 640 /etc/ssmtp/ssmtp.conf
+sudo chown root:mail /etc/ssmtp/ssmtp.conf
+
+ echo "sample text" | mail -s "Subject" eth2@bok.id.au
+
+sudo apt-get remove ssmtp
+sudo vim /etc/apt/sources.list
+%s/us.archive/au.archive/g
+
+
+
+
+https://www.medo64.com/2020/06/sendmail-via-gmail-on-ubuntu-server/
+
+debconf-set-selections <<< "postfix postfix/main_mailer_type string 'zozzfozzel'"
+debconf-set-selections <<< "postfix postfix/mailname string ''"
+apt-get install --assume-yes postfix libsasl2-modules
+
+
+unset HISTFILE
+echo "[mail.bok.id.au]:465 eth2@bok.id.au:password" > /etc/postfix/sasl/sasl_passwd
+postmap /etc/postfix/sasl/sasl_passwd
+chmod 0600 /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
+
+
+sed -i 's/relayhost = /relayhost = [mail.bok.id.au]:465/' /etc/postfix/main.cf
+cat <<EOF >> /etc/postfix/main.cf
+smtp_sasl_auth_enable = yes
+smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd
+smtp_sasl_security_options = noanonymous
+smtp_tls_wrappermode = yes
+smtp_tls_security_level = encrypt
+EOF
+
+systemctl restart postfix
+
+echo "Subject: Test via sendmail" | sendmail -v eth2@bok.id.au
+
+
+Nov 30 16:30:50 zozzfozzel postfix/smtp[30948]: SMTPS wrappermode (TCP port 465) requires setting "smtp_tls_wrappermode = yes", and "smtp_tls_security_level = encrypt" (or stronger)
+
+/etc/grafana/grafana.ini
+
+[smtp]
+;enabled = false
+enabled = true
+;host = localhost:25
+host = mail.bok.id.au:465
+;user =
+user = eth2@bok.id.au
+# If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
+;password =
+password = 56nMlwr6LmuY
+;cert_file =
+cert_file =
+;key_file =
+key_file =
+;skip_verify = false
+skip_verify = false
+;from_address = admin@grafana.localhost
+from_address = eth2@bok.id.au
+;from_name = Grafana
+from_name = eth2_zozzfozzel
+# EHLO identity in SMTP dialog (defaults to instance_name)
+;ehlo_identity = dashboard.example.com
+ehlo_identity =
+# SMTP startTLS policy (defaults to 'OpportunisticStartTLS')
+;startTLS_policy = NoStartTLS
