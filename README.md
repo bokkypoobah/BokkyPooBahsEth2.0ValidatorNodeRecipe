@@ -72,6 +72,45 @@ See https://www.makeuseof.com/tag/how-to-boot-a-linux-live-usb-stick-on-your-mac
 * Install OpenSSH server
 * Don't need to install Snaps
 
+### Resize Disk
+
+The Ubuntu installation will only configure part of your disk for the LVM group. See https://manjaro.site/how-to-extend-lvm-disk-on-ubuntu-20-04/ for some details on expanding your logical disk to use up the whole physical disk.
+
+* `df -h` will show the current disk usage
+* `sudo vgs` will show the volume group
+* `sudo pvs` and `sudo pvdisplay` will show the physical volume
+* `sudo lvs` will show the logical volumes
+* `sudo lvm lvextend -l +100%FREE /dev/ubuntu-vg/ubuntu-lv` will extend the logical volume
+* `sudo resize2fs -p /dev/mapper/ubuntu--vg-ubuntu--lv`
+* `df -h` will show the current disk usage
+
+### Update
+
+* Restart
+* `sudo apt-get update`
+* `sudo apt-get upgrade`
+
+### New Distribution?
+
+If there is a new release upgrade:
+
+* `do-release-upgrade`
+
+And sometimes:
+
+* `sudo apt-get dist-upgrade`
+
+### Some Useful Commands
+
+#### Network Info
+
+* `ifconfig -a` shows the network interfaces
+
+#### Connect via SSH from Mac
+
+* `ssh user@ipaddress`
+
+
 <br />
 
 ## Software
