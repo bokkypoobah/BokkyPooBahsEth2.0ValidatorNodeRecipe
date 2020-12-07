@@ -50,7 +50,9 @@ Do this only if you are confident you can run a validator node and keep it onlin
 
 ### Hardware Settings
 
-* Change BIOS setting so the computer restarts when the power supply is (re)connected - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
+* Change BIOS setting so the computer restarts when the power supply is (re)connected - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html . Instructions are incorrect - select Power -> Secondary Power Settings -> After Power Failure -> **Power On**. Test by removing and re-inserting the power supply plug.
+
+You can set up a password to bootup the NUC.
 
 <br />
 
@@ -58,11 +60,18 @@ Do this only if you are confident you can run a validator node and keep it onlin
 
 Install Ubuntu 20.04 LTS from https://ubuntu.com/ .
 
-See https://www.makeuseof.com/tag/how-to-boot-a-linux-live-usb-stick-on-your-mac/ for instructions for creating a USB installation disk, using either Etcher or command line utilities.
+See https://www.makeuseof.com/tag/how-to-boot-a-linux-live-usb-stick-on-your-mac/ for instructions on creating a USB installation disk, using either Etcher or command line utilities.
 
-You will have to give your new computer a `hostname`, a `username` with a `password`.
+### Configuration
 
-Install with LVM
+* Install Ubuntu Server
+** Select language
+** Use updated installer if given the choice
+** Configure network connection. Wired preferred, but wireless OK
+** Storage - use entire disk; set up as an LVM group; Encrypt with LUKS ideally (you will have to enter a password to boot up)
+** Enter your name; your server name; your username and password
+** Install OpenSSH server
+** Don't need to install Snaps
 
 <br />
 
