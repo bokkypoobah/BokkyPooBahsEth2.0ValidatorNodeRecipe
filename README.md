@@ -44,7 +44,7 @@ Do this only if you are confident you can run a validator node and keep it onlin
 ### Installation
 
 * Open cover on the bottom by unscrewing the 4 screws
-* Insert memory chip
+* Insert RAM chip(s)
 * Insert SSD drive
 * Close cover
 
@@ -108,8 +108,18 @@ And sometimes:
 
 #### Connect via SSH from Mac
 
-* `ssh user@ipaddress`
+* `ssh user@ipaddress` to initially log in
+* `ssh-copy-id user@ipaddress` to copy your public key to the new server
+* `ssh user@ipaddress` should allow you to log in without having to specify a password
+* `sudo vi /etc/ssh/sshd_config` - https://www.cyberciti.biz/faq/how-to-disable-ssh-password-login-on-linux/
+  * Uncomment `PasswordAuthentication no`
+  * Add `PermitRootLogin no`
+  * Save and close the file
+* `sudo systemctl restart sshd`
 
+#### Install Further Software
+
+* `sudo apt-get install lm-sensors` to install temperature utilities, e.g., `sensors`
 
 <br />
 
@@ -118,16 +128,6 @@ And sometimes:
 * eth1 - Go Ethereum
 * eth2 - Lighthouse
 * monitoring - Prometheus
-
-<br />
-
-## Install Hardware And System Settings
-
-Install RAM and SSD.
-
-Connect to monitor, keyboard and network.
-
-Change BIOS settings so NUC powers on by default - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
 
 <br />
 
