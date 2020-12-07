@@ -13,6 +13,18 @@ Other references, including different eth1 and eth2 clients:
 
 <hr />
 
+## Overview
+
+* Deposit 32 ETH
+* Hardware
+* Operating System
+* Software
+
+
+<br />
+
+<hr />
+
 ## Deposit 32 ETH
 
 See https://launchpad.ethereum.org/ . It's now after genesis (01 Dec 2020), so your 32 ETH deposit go into a queue for a period of time before your eth2 validator become active.
@@ -21,9 +33,36 @@ See https://launchpad.ethereum.org/ . It's now after genesis (01 Dec 2020), so y
 
 ## Hardware
 
+Specifications:
+
 * Intel NUC 10th generation i5 or i7
 * 16 GB RAM minimum
 * 1 TB SSH minimum. eth1 chaindata starts at ~ 300GB and grows about 2GB per day
+
+
+Installation:
+
+* Open cover on the bottom by unscrewing the 4 screws
+* Insert memory chip
+* Insert SSD drive
+* Close cover
+
+
+Hardware settings:
+
+* Change BIOS setting so the computer restarts when the power supply is (re)connected - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
+
+<br />
+
+## Operating System
+
+Install Ubuntu 20.04 LTS from https://ubuntu.com/ .
+
+See https://www.makeuseof.com/tag/how-to-boot-a-linux-live-usb-stick-on-your-mac/ for instructions for creating a USB installation disk, using either Etcher or command line utilities.
+
+You will have to give your new computer a `hostname`, a `username` with a `password`.
+
+Install with LVM
 
 <br />
 
@@ -42,14 +81,6 @@ Install RAM and SSD.
 Connect to monitor, keyboard and network.
 
 Change BIOS settings so NUC powers on by default - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
-
-<br />
-
-## Installing Ubuntu Linux
-
-Install Ubuntu 20.04 LTS from https://ubuntu.com/ .
-
-You will have to give your new computer a `hostname`, a `username` with a `password`.
 
 <br />
 
