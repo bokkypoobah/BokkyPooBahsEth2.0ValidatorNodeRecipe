@@ -18,8 +18,8 @@ Other references, including different eth1 and eth2 clients:
 * Deposit 32 ETH
 * Hardware
 * Operating System
-* Software
-
+* Install Go-Ethereum
+* Install Lighthouse
 
 <br />
 
@@ -32,6 +32,8 @@ See https://launchpad.ethereum.org/ . It's now after genesis (01 Dec 2020), so y
 Do this only if you are confident you can run a validator node and keep it online (my aim is for 90+% uptime).
 
 <br />
+
+<hr />
 
 ## Hardware
 
@@ -55,6 +57,8 @@ Do this only if you are confident you can run a validator node and keep it onlin
 You can set up a password to bootup the NUC.
 
 <br />
+
+<hr />
 
 ## Operating System
 
@@ -120,18 +124,14 @@ And sometimes:
 #### Install Further Software
 
 * `sudo apt-get install lm-sensors` to install temperature utilities, e.g., `sensors`
+* `sudo apt install net-tools` to install tools for commands like `ifconfig -a` (network interface)
+
 
 <br />
 
-## Software
+<hr />
 
-* eth1 - Go Ethereum
-* eth2 - Lighthouse
-* monitoring - Prometheus
-
-<br />
-
-## Go Ethereum
+## Install  Go Ethereum
 
 This is installed for a user `geth` with a home directory `/home/geth`. Go Ethereum data will be located in `/home/geth/.ethereum`.
 
@@ -141,12 +141,13 @@ This is installed for a user `geth` with a home directory `/home/geth`. Go Ether
 
 Installation from https://geth.ethereum.org/docs/install-and-build/installing-geth#install-on-ubuntu-via-ppas :
 
-    sudo add-apt-repository -y ppa:ethereum/ethereum
-    sudo apt-get update
-    sudo apt-get install ethereum
-    # geth is now installed in /usr/local/bin/geth
+```bash
+sudo add-apt-repository -y ppa:ethereum/ethereum
+sudo apt-get update
+sudo apt-get install ethereum
+```
 
-Add the user **geth** with a home directory `/home/geth` with the bash shell:
+`geth` is now installed in ``/usr/local/bin/geth`.
 
 <br />
 
