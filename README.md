@@ -29,26 +29,26 @@ Other references, including different eth1 and eth2 clients:
 
 See https://launchpad.ethereum.org/ . It's now after genesis (01 Dec 2020), so your 32 ETH deposit go into a queue for a period of time before your eth2 validator become active.
 
+Do this only if you are confident you can run a validator node and keep it online (my aim is for 90+% uptime).
+
 <br />
 
 ## Hardware
 
-Specifications:
+### Specifications
 
 * Intel NUC 10th generation i5 or i7
 * 16 GB RAM minimum
 * 1 TB SSH minimum. eth1 chaindata starts at ~ 300GB and grows about 2GB per day
 
-
-Installation:
+### Installation
 
 * Open cover on the bottom by unscrewing the 4 screws
 * Insert memory chip
 * Insert SSD drive
 * Close cover
 
-
-Hardware settings:
+### Hardware Settings
 
 * Change BIOS setting so the computer restarts when the power supply is (re)connected - https://www.intel.com/content/www/us/en/support/articles/000054773/intel-nuc.html
 
