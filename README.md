@@ -62,16 +62,15 @@ Install Ubuntu 20.04 LTS from https://ubuntu.com/ .
 
 See https://www.makeuseof.com/tag/how-to-boot-a-linux-live-usb-stick-on-your-mac/ for instructions on creating a USB installation disk, using either Etcher or command line utilities.
 
-### Configuration
+### Install Ubuntu Server
 
-* Install Ubuntu Server
-** Select language
-** Use updated installer if given the choice
-** Configure network connection. Wired preferred, but wireless OK
-** Storage - use entire disk; set up as an LVM group; Encrypt with LUKS ideally (you will have to enter a password to boot up)
-** Enter your name; your server name; your username and password
-** Install OpenSSH server
-** Don't need to install Snaps
+* Select language
+* Use updated installer if given the choice
+* Configure network connection. Wired preferred, but wireless OK
+* Storage - use entire disk; set up as an LVM group; Encrypt with LUKS ideally (you will have to enter a password to boot up)
+* Enter your name; your server name; your username and password
+* Install OpenSSH server
+* Don't need to install Snaps
 
 <br />
 
