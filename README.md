@@ -125,11 +125,25 @@ If there is a new release upgrade:
   * Save and close the file
 * `sudo systemctl restart sshd`
 
+#### Install Firewall
+
+https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-14-04
+
+* `sudo apt-get install ufw`
+* `sudo vi /etc/default/ufw`. Check `IPV6=yes`
+* `sudo ufw reset`
+* `sudo ufw status verbose`. Should show inactive
+* `sudo ufw default deny incoming`
+* `sudo ufw default allow outgoing`
+* `sudo ufw allow ssh`
+* `sudo ufw allow 30303`
+* `sudo ufw enable`
+* `sudo ufw status verbose`. Should show active
+
 #### Install Further Software
 
 * `sudo apt-get install lm-sensors` to install temperature utilities, e.g., `sensors`
 * `sudo apt-get install net-tools` to install tools for commands like `ifconfig -a` (network interface) and `netstat`
-
 
 <br />
 
