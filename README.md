@@ -377,15 +377,18 @@ WantedBy=multi-user.target
 
 Reload systemd configuration and enable prometheus:
 
-`sudo systemctl daemon-reload`
-`sudo systemctl enable prometheus`
+```
+sudo systemctl daemon-reload
+sudo systemctl enable prometheus
+```
 
 Commands to start, check status and stop prometheus:
 
-`sudo systemctl start prometheus`
-`sudo systemctl status prometheus`
-`sudo systemctl stop prometheus`
-
+```
+sudo systemctl start prometheus
+sudo systemctl status prometheus
+sudo systemctl stop prometheus
+```
 
 sudo cp node_exporter-1.0.1.linux-amd64/node_exporter /usr/local/bin
 sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
