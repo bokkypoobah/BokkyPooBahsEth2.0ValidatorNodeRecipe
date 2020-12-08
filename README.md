@@ -56,6 +56,10 @@ Do this only if you are confident you can run a validator node and keep it onlin
 
 You can set up a password to bootup the NUC.
 
+### Warning
+
+* I had some DMA failures with the Samsung 870 QVO. Some of the Samsung SSDs have had the same issue, described in https://bugzilla.kernel.org/show_bug.cgi?id=201693 . I've replaced my SSDs with the Crucial MX500 series
+
 <br />
 
 <hr />
@@ -70,7 +74,7 @@ See https://www.makeuseof.com/tag/how-to-boot-a-linux-live-usb-stick-on-your-mac
 
 * Select language
 * Use updated installer if given the choice
-* Configure network connection. Wired preferred, but wireless OK
+* Configure network connection. Wired preferred, but wireless a bit more to do - http://smalldatum.blogspot.com/2020/01/setting-up-ubuntu-1804-server-on-intel.html
 * Storage - use entire disk; set up as an LVM group; Encrypt with LUKS ideally (you will have to enter a password to boot up)
 * Enter your name; your server name; your username and password
 * Install OpenSSH server
@@ -94,15 +98,15 @@ The Ubuntu installation will only configure part of your disk for the LVM group.
 * `sudo apt-get update`
 * `sudo apt-get upgrade`
 
+And sometimes:
+
+* `sudo apt-get dist-upgrade`
+
 ### New Distribution?
 
 If there is a new release upgrade:
 
 * `do-release-upgrade`
-
-And sometimes:
-
-* `sudo apt-get dist-upgrade`
 
 ### Some Useful Commands
 
@@ -124,7 +128,7 @@ And sometimes:
 #### Install Further Software
 
 * `sudo apt-get install lm-sensors` to install temperature utilities, e.g., `sensors`
-* `sudo apt install net-tools` to install tools for commands like `ifconfig -a` (network interface)
+* `sudo apt-get install net-tools` to install tools for commands like `ifconfig -a` (network interface) and `netstat`
 
 
 <br />
@@ -147,7 +151,7 @@ sudo apt-get update
 sudo apt-get install ethereum
 ```
 
-`geth` is now installed in ``/usr/local/bin/geth`.
+`geth` is now installed in `/usr/local/bin/geth`.
 
 <br />
 
