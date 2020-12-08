@@ -287,6 +287,7 @@ Download from https://prometheus.io/download/:
 Unpack and install Prometheus:
 
 ```
+wget https://github.com/prometheus/prometheus/releases/download/v2.23.0/prometheus-2.23.0.linux-amd64.tar.gz
 tar xvzf prometheus-2.23.0.linux-amd64.tar.gz
 sudo cp prometheus-2.23.0.linux-amd64/prometheus /usr/local/bin/
 sudo cp prometheus-2.23.0.linux-amd64/promtool /usr/local/bin/
@@ -389,6 +390,12 @@ sudo systemctl status prometheus
 sudo systemctl stop prometheus
 ```
 
+To check the logs:
+
+```
+journalctl -f -u prometheus
+```
+
 ### Install Node Exporter
 
 ```
@@ -402,6 +409,7 @@ Download from https://prometheus.io/download/:
 Unpack and install Node Exporter:
 
 ```
+wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
 tar xvzf node_exporter-1.0.1.linux-amd64.tar.gz
 sudo cp node_exporter-1.0.1.linux-amd64/node_exporter /usr/local/bin
 sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
@@ -440,6 +448,12 @@ sudo systemctl status node_exporter
 sudo systemctl stop node_exporter
 ```
 
+To check the logs:
+
+```
+journalctl -f -u node_exporter
+```
+
 Check that /etc/prometheus/prometheus.yml has the following entry:
 
 ```
@@ -470,6 +484,7 @@ Download from https://prometheus.io/download/:
 Unpack and install Pushgateway:
 
 ```
+wget https://github.com/prometheus/pushgateway/releases/download/v1.3.0/pushgateway-1.3.0.linux-amd64.tar.gz
 tar xvzf pushgateway-1.3.0.linux-amd64.gz
 sudo cp pushgateway-1.3.0.linux-amd64/pushgateway /usr/local/bin
 sudo chown pushgateway:pushgateway /usr/local/bin/pushgateway
@@ -506,6 +521,12 @@ Commands to start, check status and stop Pushgateway:
 sudo systemctl start pushgateway
 sudo systemctl status pushgateway
 sudo systemctl stop pushgateway
+```
+
+To check the logs:
+
+```
+journalctl -f -u pushgateway
 ```
 
 Check that /etc/prometheus/prometheus.yml has the following entry:
