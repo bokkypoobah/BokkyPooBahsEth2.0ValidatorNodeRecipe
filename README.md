@@ -142,6 +142,10 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-u
 * `sudo ufw enable`
 * `sudo ufw status verbose`. Should show active
 
+#### Set Timezone
+
+`sudo timedatectl set-timezone Australia/Sydney`
+
 #### Install Further Software
 
 * `sudo apt-get install lm-sensors` to install temperature utilities, e.g., `sensors`
