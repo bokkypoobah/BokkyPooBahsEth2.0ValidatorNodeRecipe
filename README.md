@@ -253,7 +253,7 @@ Hit ^C to exit
 
 <hr />
 
-## Install Prometheus
+## Install Prometheus, Pushgateway and Node Exporter
 
 References: https://prometheus.io/, https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-on-ubuntu-16-04
 
@@ -267,7 +267,7 @@ sudo useradd --no-create-home --shell /bin/false pushgateway
 sudo useradd --no-create-home --shell /bin/false node_exporter
 ```
 
-### Download And Install Software
+### Install Prometheus
 
 Create directories:
 
@@ -283,12 +283,11 @@ sudo chown prometheus:prometheus /var/lib/prometheus
 Download from https://prometheus.io/download/:
 
 * prometheus-2.23.0.linux-amd64.tar.gz
-* node_exporter-1.0.1.linux-amd64.tar.gz
 
 Unpack and install Prometheus:
 
 ```
-tar xvf prometheus-2.23.0.linux-amd64.tar.gz
+tar xvzf prometheus-2.23.0.linux-amd64.tar.gz
 sudo cp prometheus-2.23.0.linux-amd64/prometheus /usr/local/bin/
 sudo cp prometheus-2.23.0.linux-amd64/promtool /usr/local/bin/
 sudo chown prometheus:prometheus /usr/local/bin/prometheus
@@ -375,14 +374,14 @@ ExecStart=/usr/local/bin/prometheus \
 WantedBy=multi-user.target
 ```
 
-Reload systemd configuration and enable prometheus:
+Reload systemd configuration and enable Prometheus:
 
 ```
 sudo systemctl daemon-reload
 sudo systemctl enable prometheus
 ```
 
-Commands to start, check status and stop prometheus:
+Commands to start, check status and stop Prometheus:
 
 ```
 sudo systemctl start prometheus
@@ -390,57 +389,137 @@ sudo systemctl status prometheus
 sudo systemctl stop prometheus
 ```
 
+### Install Node Exporter
+
+```
+cd ~/prometheus_install
+```
+
+Download from https://prometheus.io/download/:
+
+* node_exporter-1.0.1.linux-amd64.tar.gz
+
+Unpack and install Node Exporter:
+
+```
+tar xvzf node_exporter-1.0.1.linux-amd64.tar.gz
 sudo cp node_exporter-1.0.1.linux-amd64/node_exporter /usr/local/bin
 sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
+```
 
+Create /etc/systemd/system/node_exporter.service:
+
+```
+[Unit]
+Description=Node Exporter
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=node_exporter
+Group=node_exporter
+Type=simple
+ExecStart=/usr/local/bin/node_exporter
+
+[Install]
+WantedBy=multi-user.target
+```
+
+Reload systemd configuration and enable Node Exporter:
+
+```
 sudo systemctl daemon-reload
+sudo systemctl enable node_exporter
+```
+
+Commands to start, check status and stop Node Exporter:
+
+```
 sudo systemctl start node_exporter
 sudo systemctl status node_exporter
-sudo systemctl enable node_exporter
+sudo systemctl stop node_exporter
+```
 
+Check that /etc/prometheus/prometheus.yml has the following entry:
 
-sudo nano /etc/prometheus/prometheus.yml
-...
+```
   - job_name: 'node_exporter'
-    scrape_interval: 5s
+    scrape_interval: 15s
     static_configs:
       - targets: ['localhost:9100']
+```
 
+Restart Prometheus:
 
+```
 sudo systemctl restart prometheus
-sudo systemctl status prometheus
+```
 
+### Install Pushgateway
 
-https://vinayakpandey-7997.medium.com/pushing-bash-script-result-to-prometheus-using-pushgateway-a0760cd261e
+Reference https://vinayakpandey-7997.medium.com/pushing-bash-script-result-to-prometheus-using-pushgateway-a0760cd261e
 
-sudo useradd --no-create-home --shell /bin/false pushgateway
+```
+cd ~/prometheus_install
+```
 
-wget https://github.com/prometheus/pushgateway/releases/download/v1.3.0/pushgateway-1.3.0.linux-amd64.tar.gz
+Download from https://prometheus.io/download/:
+
+* pushgateway-1.3.0.linux-amd64.tar.gz
+
+Unpack and install Pushgateway:
+
+```
+tar xvzf pushgateway-1.3.0.linux-amd64.gz
 sudo cp pushgateway-1.3.0.linux-amd64/pushgateway /usr/local/bin
 sudo chown pushgateway:pushgateway /usr/local/bin/pushgateway
+```
 
-sudo vi /etc/systemd/system/pushgateway.service
+Create /etc/systemd/system/pushgateway.service:
+
+```
 [Unit]
 Description=Prometheus Pushgateway
 Wants=network-online.target
-After=network-online.target[Service]
+After=network-online.target
+
+[Service]
 User=pushgateway
 Group=pushgateway
 Type=simple
-ExecStart=/usr/local/bin/pushgateway[Install]
-WantedBy=multi-user.target
+ExecStart=/usr/local/bin/pushgateway
 
+[Install]
+WantedBy=multi-user.target
+```
+
+Reload systemd configuration and enable Pushgateway:
+
+```
 sudo systemctl daemon-reload
+sudo systemctl enable pushgateway
+```
+
+Commands to start, check status and stop Pushgateway:
+
+```
 sudo systemctl start pushgateway
 sudo systemctl status pushgateway
-sudo systemctl enable pushgateway
+sudo systemctl stop pushgateway
+```
+
+Check that /etc/prometheus/prometheus.yml has the following entry:
 
 sudo vi /etc/prometheus/prometheus.yml
 
-- job_name: 'Pushgateway'
-  honor_labels: true
-  static_configs:
-  - targets: ['localhost:9091']
+```
+  - job_name: 'Pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['localhost:9091']
+```
+
+### Install Grafana
 
 https://grafana.com/docs/grafana/latest/installation/debian/
 
