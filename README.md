@@ -259,7 +259,7 @@ References: https://prometheus.io/, https://www.digitalocean.com/community/tutor
 
 ### Add Service Users
 
-We will be running prometheus, pushgateway and node_exporter as separate service users, without login capability
+We will be running prometheus, pushgateway and node_exporter as separate service users, without login capability:
 
 ```
 sudo useradd --no-create-home --shell /bin/false prometheus
