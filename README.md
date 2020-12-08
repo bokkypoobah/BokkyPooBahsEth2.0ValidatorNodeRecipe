@@ -75,7 +75,9 @@ See https://www.makeuseof.com/tag/how-to-boot-a-linux-live-usb-stick-on-your-mac
 * Select language
 * Use updated installer if given the choice
 * Configure network connection. Wired preferred, but wireless a bit more to do - http://smalldatum.blogspot.com/2020/01/setting-up-ubuntu-1804-server-on-intel.html
-* Storage - use entire disk; set up as an LVM group; Encrypt with LUKS ideally (you will have to enter a password to boot up)
+* Storage - use entire disk
+  * Set up as an LVM group
+    * Encrypt with LUKS ideally (you will have to enter a password to boot up)
 * Enter your name; your server name; your username and password
 * Install OpenSSH server
 * Don't need to install Snaps
