@@ -60,6 +60,8 @@ You can set up a password to bootup the NUC.
 
 * I had some DMA failures with the Samsung 870 QVO. Some of the Samsung SSDs have had the same issue, described in https://bugzilla.kernel.org/show_bug.cgi?id=201693 . I've replaced my SSDs with the Crucial MX500 series
 
+* `irq/65-i2c-INT3` takes up CPU time. Workaround is to add `blacklist tps6598x` to `/etc/modprobe.d/blacklist.conf`
+
 <br />
 
 <hr />
@@ -164,13 +166,13 @@ Reference https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firew
 
 <hr />
 
-## Install  Go Ethereum
+## Install Go Ethereum
 
 This is installed for a user `geth` with a home directory `/home/geth`. Go Ethereum data will be located in `/home/geth/.ethereum`.
 
 <br />
 
-### Install Software
+### Installation via PPA
 
 Installation from https://geth.ethereum.org/docs/install-and-build/installing-geth#install-on-ubuntu-via-ppas :
 
@@ -251,98 +253,138 @@ Hit ^C to exit
 
 <hr />
 
-# TODO BELOW
+## Install Prometheus
 
-## lighthouse
+References: https://prometheus.io/, https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-on-ubuntu-16-04
 
-sudo useradd -m -s /bin/bash lighthouse
+### Add Service Users
 
-sudo su - lighthouse
+We will be running prometheus, pushgateway and node_exporter as separate service users, without login capability
 
-mkdir install
-cd install
-wget https://github.com/sigp/lighthouse/releases/download/v1.0.1/lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
-tar xvzf lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
-mkdir ~/bin
-mv lighthouse ~/bin
-~/bin/lighthouse --version
-
-
-## Prometheus
-
-https://prometheus.io/
-
-    sudo useradd -m -s /bin/bash prometheus
-    sudo su - prometheus
-
-    mkdir ~/install
-    cd ~/install
-    # Check website for latest version
-    wget https://github.com/prometheus/prometheus/releases/download/v2.23.0/prometheus-2.23.0.linux-amd64.tar.gz
-    # https://prometheus.io/docs/introduction/first_steps/
-    tar xvfz prometheus-*.tar.gz
-    cd prometheus-*
-    ./prometheus --help
-    # Configuration
-    vi prometheus.yml
-    # set scrape_interval: 12s and evaluation_interval: 12s to match slot
-    ./prometheus --config.file=prometheus.yml
-    ssh -nNT -L 9090:192.168.1.133:9090 username@remotehost
-    http://localhost:9090
-    http://localhost:9090/metrics
-
-    cd ~/prometheus
-    wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-    tar xvfz node_exporter-*.*-amd64.tar.gz
-    cd node_exporter-*.*-amd64
-    ./node_exporter
-    curl http://localhost:9100/metrics
-
-
-https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-on-ubuntu-16-04
-
+```
 sudo useradd --no-create-home --shell /bin/false prometheus
+sudo useradd --no-create-home --shell /bin/false pushgateway
 sudo useradd --no-create-home --shell /bin/false node_exporter
+```
+
+### Download And Install Software
+
+Create directories:
+
+```
+mkdir ~/prometheus_install
+cd ~/prometheus_install
 sudo mkdir /etc/prometheus
 sudo mkdir /var/lib/prometheus
 sudo chown prometheus:prometheus /etc/prometheus
 sudo chown prometheus:prometheus /var/lib/prometheus
+```
 
-Download from https://prometheus.io/download/
-prometheus-2.23.0.linux-amd64.tar.gz
-node_exporter-1.0.1.linux-amd64.tar.gz
+Download from https://prometheus.io/download/:
 
+* prometheus-2.23.0.linux-amd64.tar.gz
+* node_exporter-1.0.1.linux-amd64.tar.gz
+
+Unpack and install Prometheus:
+
+```
 tar xvf prometheus-2.23.0.linux-amd64.tar.gz
-
 sudo cp prometheus-2.23.0.linux-amd64/prometheus /usr/local/bin/
 sudo cp prometheus-2.23.0.linux-amd64/promtool /usr/local/bin/
-
 sudo chown prometheus:prometheus /usr/local/bin/prometheus
 sudo chown prometheus:prometheus /usr/local/bin/promtool
-
 sudo cp -r prometheus-2.23.0.linux-amd64/consoles /etc/prometheus
 sudo cp -r prometheus-2.23.0.linux-amd64/console_libraries /etc/prometheus
-
 sudo chown -R prometheus:prometheus /etc/prometheus/consoles
 sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
+```
 
-# Customise /etc/prometheus/prometheus.yml
+Customise /etc/prometheus/prometheus.yml:
 
+```
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
 
-sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+      # - alertmanager:9093
 
-sudo -u prometheus /usr/local/bin/prometheus \
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: 'node_exporter'
+    scrape_interval: 15s
+    static_configs:
+      - targets: ['localhost:9100']
+
+  - job_name: 'Pushgateway'
+    honor_labels: true
+    static_configs:
+      - targets: ['localhost:9091']
+
+  - job_name: 'eth2_beacon'
+    static_configs:
+      - targets: ['localhost:5054']
+
+  - job_name: 'eth2_validator'
+    static_configs:
+      - targets: ['localhost:5064']
+```
+
+`sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml`
+
+Create /etc/systemd/system/prometheus.service:
+
+```
+[Unit]
+Description=Prometheus
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+User=prometheus
+Group=prometheus
+Type=simple
+ExecStart=/usr/local/bin/prometheus \
     --config.file /etc/prometheus/prometheus.yml \
     --storage.tsdb.path /var/lib/prometheus/ \
     --web.console.templates=/etc/prometheus/consoles \
     --web.console.libraries=/etc/prometheus/console_libraries
 
-create /etc/systemd/system/prometheus.service
+[Install]
+WantedBy=multi-user.target
+```
 
-sudo systemctl daemon-reload
-sudo systemctl start prometheus
-sudo systemctl status prometheus
-sudo systemctl enable prometheus
+Reload systemd configuration and enable prometheus:
+
+`sudo systemctl daemon-reload`
+`sudo systemctl enable prometheus`
+
+Commands to start, check status and stop prometheus:
+
+`sudo systemctl start prometheus`
+`sudo systemctl status prometheus`
+`sudo systemctl stop prometheus`
 
 
 sudo cp node_exporter-1.0.1.linux-amd64/node_exporter /usr/local/bin
@@ -415,6 +457,26 @@ sudo /bin/systemctl start grafana-server
 # does not work
 # geth --metrics
 # curl localhost:6060/metrics
+
+<br />
+
+<hr />
+
+# TODO BELOW
+
+## lighthouse
+
+sudo useradd -m -s /bin/bash lighthouse
+
+sudo su - lighthouse
+
+mkdir install
+cd install
+wget https://github.com/sigp/lighthouse/releases/download/v1.0.1/lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
+tar xvzf lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
+mkdir ~/bin
+mv lighthouse ~/bin
+~/bin/lighthouse --version
 
 https://github.com/sigp/lighthouse/blob/5a3b94cbb4a82f999c2deb5c45146eaf58146957/book/src/advanced_metrics.md
 lighthouse bn --metrics
