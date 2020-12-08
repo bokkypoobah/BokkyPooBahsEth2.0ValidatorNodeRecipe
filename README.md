@@ -288,7 +288,7 @@ Unpack and install Prometheus:
 
 ```
 wget https://github.com/prometheus/prometheus/releases/download/v2.23.0/prometheus-2.23.0.linux-amd64.tar.gz
-tar xvzf prometheus-2.23.0.linux-amd64.tar.gz
+tar xvf prometheus-2.23.0.linux-amd64.tar.gz
 sudo cp prometheus-2.23.0.linux-amd64/prometheus /usr/local/bin/
 sudo cp prometheus-2.23.0.linux-amd64/promtool /usr/local/bin/
 sudo chown prometheus:prometheus /usr/local/bin/prometheus
@@ -299,7 +299,7 @@ sudo chown -R prometheus:prometheus /etc/prometheus/consoles
 sudo chown -R prometheus:prometheus /etc/prometheus/console_libraries
 ```
 
-Customise /etc/prometheus/prometheus.yml:
+`sudo vi /etc/prometheus/prometheus.yml`:
 
 ```
 # my global config
@@ -353,7 +353,7 @@ scrape_configs:
 
 `sudo chown prometheus:prometheus /etc/prometheus/prometheus.yml`
 
-Create /etc/systemd/system/prometheus.service:
+`sudo vi /etc/systemd/system/prometheus.service`:
 
 ```
 [Unit]
@@ -396,6 +396,12 @@ To check the logs:
 journalctl -f -u prometheus
 ```
 
+Check the Prometheus metrics page:
+
+```
+curl localhost:9090/metrics
+```
+
 ### Install Node Exporter
 
 ```
@@ -410,12 +416,12 @@ Unpack and install Node Exporter:
 
 ```
 wget https://github.com/prometheus/node_exporter/releases/download/v1.0.1/node_exporter-1.0.1.linux-amd64.tar.gz
-tar xvzf node_exporter-1.0.1.linux-amd64.tar.gz
+tar xvf node_exporter-1.0.1.linux-amd64.tar.gz
 sudo cp node_exporter-1.0.1.linux-amd64/node_exporter /usr/local/bin
 sudo chown node_exporter:node_exporter /usr/local/bin/node_exporter
 ```
 
-Create /etc/systemd/system/node_exporter.service:
+`sudo vi /etc/systemd/system/node_exporter.service`:
 
 ```
 [Unit]
@@ -454,6 +460,12 @@ To check the logs:
 journalctl -f -u node_exporter
 ```
 
+Check the Node Exporter metrics page:
+
+```
+curl localhost:9100/metrics
+```
+
 Check that /etc/prometheus/prometheus.yml has the following entry:
 
 ```
@@ -485,12 +497,12 @@ Unpack and install Pushgateway:
 
 ```
 wget https://github.com/prometheus/pushgateway/releases/download/v1.3.0/pushgateway-1.3.0.linux-amd64.tar.gz
-tar xvzf pushgateway-1.3.0.linux-amd64.gz
+tar xvf pushgateway-1.3.0.linux-amd64.gz
 sudo cp pushgateway-1.3.0.linux-amd64/pushgateway /usr/local/bin
 sudo chown pushgateway:pushgateway /usr/local/bin/pushgateway
 ```
 
-Create /etc/systemd/system/pushgateway.service:
+`sudo vi /etc/systemd/system/pushgateway.service`:
 
 ```
 [Unit]
@@ -527,6 +539,12 @@ To check the logs:
 
 ```
 journalctl -f -u pushgateway
+```
+
+Check the Pushgateway metrics page:
+
+```
+curl localhost:9091/metrics
 ```
 
 Check that /etc/prometheus/prometheus.yml has the following entry:
@@ -576,7 +594,7 @@ sudo su - lighthouse
 mkdir install
 cd install
 wget https://github.com/sigp/lighthouse/releases/download/v1.0.1/lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
-tar xvzf lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
+tar xvf lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
 mkdir ~/bin
 mv lighthouse ~/bin
 ~/bin/lighthouse --version
