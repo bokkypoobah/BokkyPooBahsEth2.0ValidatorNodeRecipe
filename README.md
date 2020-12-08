@@ -129,6 +129,11 @@ If there is a new release upgrade:
 
 #### Install Firewall
 
+Enable only the following incoming ports:
+
+* 22 Secure shell (ssh)
+* 30303 Go Ethereum communications port
+
 https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-14-04
 
 * `sudo apt-get install ufw`
