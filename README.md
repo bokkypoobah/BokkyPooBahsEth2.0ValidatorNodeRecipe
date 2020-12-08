@@ -127,6 +127,8 @@ If there is a new release upgrade:
   * Save and close the file
 * `sudo systemctl restart sshd`
 
+Reference https://help.dreamhost.com/hc/en-us/articles/216499537-How-to-configure-passwordless-login-in-Mac-OS-X-and-Linux
+
 #### Install Firewall
 
 Enable only the following incoming ports:
@@ -134,7 +136,7 @@ Enable only the following incoming ports:
 * 22 Secure shell (ssh)
 * 30303 Go Ethereum communications port
 
-https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-14-04
+Configuration:
 
 * `sudo apt-get install ufw`
 * `sudo vi /etc/default/ufw`. Check `IPV6=yes`
@@ -146,6 +148,8 @@ https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-u
 * `sudo ufw allow 30303`
 * `sudo ufw enable`
 * `sudo ufw status verbose`. Should show active
+
+Reference https://www.digitalocean.com/community/tutorials/how-to-set-up-a-firewall-with-ufw-on-ubuntu-14-04
 
 #### Set Timezone
 
