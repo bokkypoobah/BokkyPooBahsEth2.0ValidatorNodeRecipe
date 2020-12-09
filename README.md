@@ -579,6 +579,21 @@ sudo /bin/systemctl enable grafana-server
 sudo /bin/systemctl start grafana-server
 ```
 
+Create a SSH tunnel from your laptop to the server:
+
+```
+ssh -nNT -L 3000:127.0.0.1:3000 hostname
+```
+
+You can then browse http://localhost:3000 on your laptop to configure Grafana. Initial username/password is admin/admin.
+
+Then:
+
+* Select Configuration -> Data Sources
+* Select Prometheus. Set URL to `http://localhost:9090`
+
+Set up the data source from the configuration icon. Select Prometheus.
+
 # does not work
 # geth --metrics
 # curl localhost:6060/metrics
@@ -587,21 +602,35 @@ sudo /bin/systemctl start grafana-server
 
 <hr />
 
-# TODO BELOW
-
 ## lighthouse
 
+### Create `lighthouse` User
+
+```
 sudo useradd -m -s /bin/bash lighthouse
+```
 
+To log in as the **lighthouse** user:
+
+```
 sudo su - lighthouse
+```
 
+### Install Lighthouse
+
+Get latest version from https://github.com/sigp/lighthouse/releases
+
+```
 mkdir install
 cd install
-wget https://github.com/sigp/lighthouse/releases/download/v1.0.1/lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
-tar xvf lighthouse-v1.0.1-x86_64-unknown-linux-gnu.tar.gz
+wget https://github.com/sigp/lighthouse/releases/download/v1.0.3/lighthouse-v1.0.3-x86_64-unknown-linux-gnu.tar.gz
+tar xvf lighthouse-v1.0.3-x86_64-unknown-linux-gnu.tar.gz
 mkdir ~/bin
 mv lighthouse ~/bin
 ~/bin/lighthouse --version
+```
+
+## TODO BELOW
 
 https://github.com/sigp/lighthouse/blob/5a3b94cbb4a82f999c2deb5c45146eaf58146957/book/src/advanced_metrics.md
 lighthouse bn --metrics
@@ -617,23 +646,23 @@ sudo apt-get install ssmtp
 
 sudo vi /etc/ssmtp/ssmtp.conf
 
-root=eth2@bok.id.au
-mailhub=mail.bok.id.au:465
+root=eth2@mail.server.com
+mailhub=mail.server.com:465
 FromLineOverride=YES
-AuthUser=eth2@bok.id.au
+AuthUser=eth2@mail.server.com
 AuthPass=<password>
 UseTLS=YES
 UseSTARTTLS=YES
 
 
-echo "Test SSMTP" | ssmtp eth2@bok.id.au
+echo "Test SSMTP" | ssmtp eth2@mail.server.com
 
 sudo apt install mailutils
 
 sudo chmod 640 /etc/ssmtp/ssmtp.conf
 sudo chown root:mail /etc/ssmtp/ssmtp.conf
 
- echo "sample text" | mail -s "Subject" eth2@bok.id.au
+ echo "sample text" | mail -s "Subject" eth2@mail.server.com
 
 sudo apt-get remove ssmtp
 sudo vim /etc/apt/sources.list
@@ -650,12 +679,12 @@ apt-get install --assume-yes postfix libsasl2-modules
 
 
 unset HISTFILE
-echo "[mail.bok.id.au]:465 eth2@bok.id.au:password" > /etc/postfix/sasl/sasl_passwd
+echo "[mail.server.com]:465 eth2@mail.server.com:password" > /etc/postfix/sasl/sasl_passwd
 postmap /etc/postfix/sasl/sasl_passwd
 chmod 0600 /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
 
 
-sed -i 's/relayhost = /relayhost = [mail.bok.id.au]:465/' /etc/postfix/main.cf
+sed -i 's/relayhost = /relayhost = [mail.server.com]:465/' /etc/postfix/main.cf
 cat <<EOF >> /etc/postfix/main.cf
 smtp_sasl_auth_enable = yes
 smtp_sasl_password_maps = hash:/etc/postfix/sasl/sasl_passwd
@@ -666,7 +695,7 @@ EOF
 
 systemctl restart postfix
 
-echo "Subject: Test via sendmail" | sendmail -v eth2@bok.id.au
+echo "Subject: Test via sendmail" | sendmail -v eth2@mail.server.com
 
 
 Nov 30 16:30:50 zozzfozzel postfix/smtp[30948]: SMTPS wrappermode (TCP port 465) requires setting "smtp_tls_wrappermode = yes", and "smtp_tls_security_level = encrypt" (or stronger)
@@ -677,12 +706,12 @@ Nov 30 16:30:50 zozzfozzel postfix/smtp[30948]: SMTPS wrappermode (TCP port 465)
 ;enabled = false
 enabled = true
 ;host = localhost:25
-host = mail.bok.id.au:465
+host = mail.server.com:465
 ;user =
-user = eth2@bok.id.au
+user = eth2@mail.server.com
 # If the password contains # or ; you have to wrap it with triple quotes. Ex """#password;"""
 ;password =
-password = 56nMlwr6LmuY
+password = {email_password}
 ;cert_file =
 cert_file =
 ;key_file =
@@ -690,7 +719,7 @@ key_file =
 ;skip_verify = false
 skip_verify = false
 ;from_address = admin@grafana.localhost
-from_address = eth2@bok.id.au
+from_address = eth2@mail.server.com
 ;from_name = Grafana
 from_name = eth2_zozzfozzel
 # EHLO identity in SMTP dialog (defaults to instance_name)
