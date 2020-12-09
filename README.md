@@ -147,7 +147,8 @@ Configuration:
 * `sudo ufw default deny incoming`
 * `sudo ufw default allow outgoing`
 * `sudo ufw allow ssh`
-* `sudo ufw allow 30303`
+* `sudo ufw allow 30303`. eth1 p2p communication port
+* `sudo ufw allow 9000`. eth2 p2p communication port
 * `sudo ufw enable`
 * `sudo ufw status verbose`. Should show active
 
@@ -630,45 +631,62 @@ mv lighthouse ~/bin
 ~/bin/lighthouse --version
 ```
 
+### Install Lighthouse (Beacon) As A Systemd Service
+
+```
+sudo vi /etc/systemd/system/lighthouse_beacon.service
+```
+
+Add the following:
+
+```
+[Unit]
+Description=Lighthouse Beacon
+
+[Service]
+Type=simple
+User=lighthouse
+ExecStart=/home/lighthouse/bin/lighthouse bn --http --staking --metrics
+
+[Install]
+WantedBy=default.target
+```
+
+Reload the sysmtemd configuration files
+
+```
+sudo systemctl daemon-reload
+```
+
+Enable The Lighthouse (Beacon) Service
+
+```
+sudo systemctl enable lighthouse_beacon
+```
+
+Start The Lighthouse (Beacon) Service
+
+```
+sudo systemctl start lighthouse_beacon
+```
+
+Check the logs for the Lighthouse (Beacon) Service
+
+```
+journalctl -f -u lighthouse_beacon
+```
+
+Hit ^C to exit
+
 ## TODO BELOW
 
+```
 https://github.com/sigp/lighthouse/blob/5a3b94cbb4a82f999c2deb5c45146eaf58146957/book/src/advanced_metrics.md
 lighthouse bn --metrics
 curl localhost:5054/metrics
 
 lighthouse vc --metrics
 curl localhost:5064/metrics
-
-grafana
-
-sudo apt-get update
-sudo apt-get install ssmtp
-
-sudo vi /etc/ssmtp/ssmtp.conf
-
-root=eth2@mail.server.com
-mailhub=mail.server.com:465
-FromLineOverride=YES
-AuthUser=eth2@mail.server.com
-AuthPass=<password>
-UseTLS=YES
-UseSTARTTLS=YES
-
-
-echo "Test SSMTP" | ssmtp eth2@mail.server.com
-
-sudo apt install mailutils
-
-sudo chmod 640 /etc/ssmtp/ssmtp.conf
-sudo chown root:mail /etc/ssmtp/ssmtp.conf
-
- echo "sample text" | mail -s "Subject" eth2@mail.server.com
-
-sudo apt-get remove ssmtp
-sudo vim /etc/apt/sources.list
-%s/us.archive/au.archive/g
-
-
 
 
 https://www.medo64.com/2020/06/sendmail-via-gmail-on-ubuntu-server/
