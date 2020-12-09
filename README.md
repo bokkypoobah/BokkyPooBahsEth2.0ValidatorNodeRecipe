@@ -603,7 +603,7 @@ Set up the data source from the configuration icon. Select Prometheus.
 
 <hr />
 
-## lighthouse
+## Lighthouse
 
 ### Create `lighthouse` User
 
@@ -678,29 +678,66 @@ journalctl -f -u lighthouse_beacon
 
 Hit ^C to exit
 
+### Install Lighthouse (Validator) As A Systemd Service
+
+```
+sudo vi /etc/systemd/system/lighthouse_validator.service
+```
+
+Add the following:
+
+```
+[Unit]
+Description=Lighthouse Validator
+
+[Service]
+Type=simple
+User=lighthouse
+ExecStart=/home/lighthouse/bin/lighthouse vc --metrics --graffiti "BokkyPooBah wuz here!"
+
+[Install]
+WantedBy=default.target
+```
+
+Reload the sysmtemd configuration files
+
+```
+sudo systemctl daemon-reload
+```
+
+Enable The Lighthouse (Validator) Service
+
+```
+sudo systemctl enable lighthouse_validator
+```
+
+Start The Lighthouse (Validator) Service
+
+```
+sudo systemctl start lighthouse_validator
+```
+
+Check the logs for the Lighthouse (Validator) Service
+
+```
+journalctl -f -u lighthouse_validator
+```
+
+Hit ^C to exit
+
 ## TODO BELOW
 
 ```
-https://github.com/sigp/lighthouse/blob/5a3b94cbb4a82f999c2deb5c45146eaf58146957/book/src/advanced_metrics.md
-lighthouse bn --metrics
-curl localhost:5054/metrics
-
-lighthouse vc --metrics
-curl localhost:5064/metrics
-
-
 https://www.medo64.com/2020/06/sendmail-via-gmail-on-ubuntu-server/
 
 debconf-set-selections <<< "postfix postfix/main_mailer_type string 'zozzfozzel'"
 debconf-set-selections <<< "postfix postfix/mailname string ''"
 apt-get install --assume-yes postfix libsasl2-modules
 
-
 unset HISTFILE
 echo "[mail.server.com]:465 eth2@mail.server.com:password" > /etc/postfix/sasl/sasl_passwd
 postmap /etc/postfix/sasl/sasl_passwd
 chmod 0600 /etc/postfix/sasl/sasl_passwd /etc/postfix/sasl/sasl_passwd.db
-
 
 sed -i 's/relayhost = /relayhost = [mail.server.com]:465/' /etc/postfix/main.cf
 cat <<EOF >> /etc/postfix/main.cf
@@ -745,3 +782,4 @@ from_name = eth2_zozzfozzel
 ehlo_identity =
 # SMTP startTLS policy (defaults to 'OpportunisticStartTLS')
 ;startTLS_policy = NoStartTLS
+```
