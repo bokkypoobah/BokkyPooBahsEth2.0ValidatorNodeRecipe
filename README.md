@@ -680,6 +680,8 @@ Hit ^C to exit
 
 ### Install Lighthouse (Validator) As A Systemd Service
 
+Note: You will need to import the validator keys before this will work.
+
 ```
 sudo vi /etc/systemd/system/lighthouse_validator.service
 ```
