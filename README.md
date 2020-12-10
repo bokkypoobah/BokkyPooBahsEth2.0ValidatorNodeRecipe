@@ -15,11 +15,12 @@ Other references, including different eth1 and eth2 clients:
 
 ## Overview
 
-* Deposit 32 ETH
-* Hardware
-* Operating System
-* Install Go-Ethereum
-* Install Lighthouse
+* [Deposit 32 ETH](#deposit-32-eth)
+* [Hardware](#hardware)
+* [Operating System](#operating-system)
+* [Install Go Ethereum](#install-go-ethereum)
+* [Install Lighthouse](#install-lighthouse)
+* [Install Prometheus, Pushgateway, Node Exporter And Grafana](#install-prometheus--pushgateway--node-exporter-and-grafana)
 
 <br />
 
@@ -254,7 +255,137 @@ Hit ^C to exit
 
 <hr />
 
-## Install Prometheus, Pushgateway and Node Exporter
+## Install Lighthouse
+
+### Create `lighthouse` User
+
+```
+sudo useradd -m -s /bin/bash lighthouse
+```
+
+To log in as the **lighthouse** user:
+
+```
+sudo su - lighthouse
+```
+
+### Install From Tar File
+
+Get latest version from https://github.com/sigp/lighthouse/releases
+
+```
+mkdir install
+cd install
+wget https://github.com/sigp/lighthouse/releases/download/v1.0.3/lighthouse-v1.0.3-x86_64-unknown-linux-gnu.tar.gz
+tar xvf lighthouse-v1.0.3-x86_64-unknown-linux-gnu.tar.gz
+mkdir ~/bin
+mv lighthouse ~/bin
+~/bin/lighthouse --version
+```
+
+### Install Lighthouse (Beacon) As A Systemd Service
+
+```
+sudo vi /etc/systemd/system/lighthouse_beacon.service
+```
+
+Add the following:
+
+```
+[Unit]
+Description=Lighthouse Beacon
+
+[Service]
+Type=simple
+User=lighthouse
+ExecStart=/home/lighthouse/bin/lighthouse bn --http --staking --metrics
+
+[Install]
+WantedBy=default.target
+```
+
+Reload the sysmtemd configuration files
+
+```
+sudo systemctl daemon-reload
+```
+
+Enable The Lighthouse (Beacon) Service
+
+```
+sudo systemctl enable lighthouse_beacon
+```
+
+Start The Lighthouse (Beacon) Service
+
+```
+sudo systemctl start lighthouse_beacon
+```
+
+Check the logs for the Lighthouse (Beacon) Service
+
+```
+journalctl -f -u lighthouse_beacon
+```
+
+Hit ^C to exit
+
+### Install Lighthouse (Validator) As A Systemd Service
+
+Note: You will need to import the validator keys before this will work.
+
+Warning: Running more than one instance of the validator with your validator keys can result in your account getting slashed.
+
+```
+sudo vi /etc/systemd/system/lighthouse_validator.service
+```
+
+Add the following:
+
+```
+[Unit]
+Description=Lighthouse Validator
+
+[Service]
+Type=simple
+User=lighthouse
+ExecStart=/home/lighthouse/bin/lighthouse vc --metrics --graffiti "BokkyPooBah wuz here!"
+
+[Install]
+WantedBy=default.target
+```
+
+Reload the sysmtemd configuration files
+
+```
+sudo systemctl daemon-reload
+```
+
+Enable The Lighthouse (Validator) Service
+
+```
+sudo systemctl enable lighthouse_validator
+```
+
+Start The Lighthouse (Validator) Service
+
+```
+sudo systemctl start lighthouse_validator
+```
+
+Check the logs for the Lighthouse (Validator) Service
+
+```
+journalctl -f -u lighthouse_validator
+```
+
+Hit ^C to exit
+
+<br />
+
+<hr />
+
+## Install Prometheus, Pushgateway, Node Exporter And Grafana
 
 References: https://prometheus.io/, https://www.digitalocean.com/community/tutorials/how-to-install-prometheus-on-ubuntu-16-04
 
@@ -602,130 +733,6 @@ Set up the data source from the configuration icon. Select Prometheus.
 <br />
 
 <hr />
-
-## Lighthouse
-
-### Create `lighthouse` User
-
-```
-sudo useradd -m -s /bin/bash lighthouse
-```
-
-To log in as the **lighthouse** user:
-
-```
-sudo su - lighthouse
-```
-
-### Install Lighthouse
-
-Get latest version from https://github.com/sigp/lighthouse/releases
-
-```
-mkdir install
-cd install
-wget https://github.com/sigp/lighthouse/releases/download/v1.0.3/lighthouse-v1.0.3-x86_64-unknown-linux-gnu.tar.gz
-tar xvf lighthouse-v1.0.3-x86_64-unknown-linux-gnu.tar.gz
-mkdir ~/bin
-mv lighthouse ~/bin
-~/bin/lighthouse --version
-```
-
-### Install Lighthouse (Beacon) As A Systemd Service
-
-```
-sudo vi /etc/systemd/system/lighthouse_beacon.service
-```
-
-Add the following:
-
-```
-[Unit]
-Description=Lighthouse Beacon
-
-[Service]
-Type=simple
-User=lighthouse
-ExecStart=/home/lighthouse/bin/lighthouse bn --http --staking --metrics
-
-[Install]
-WantedBy=default.target
-```
-
-Reload the sysmtemd configuration files
-
-```
-sudo systemctl daemon-reload
-```
-
-Enable The Lighthouse (Beacon) Service
-
-```
-sudo systemctl enable lighthouse_beacon
-```
-
-Start The Lighthouse (Beacon) Service
-
-```
-sudo systemctl start lighthouse_beacon
-```
-
-Check the logs for the Lighthouse (Beacon) Service
-
-```
-journalctl -f -u lighthouse_beacon
-```
-
-Hit ^C to exit
-
-### Install Lighthouse (Validator) As A Systemd Service
-
-Note: You will need to import the validator keys before this will work.
-
-```
-sudo vi /etc/systemd/system/lighthouse_validator.service
-```
-
-Add the following:
-
-```
-[Unit]
-Description=Lighthouse Validator
-
-[Service]
-Type=simple
-User=lighthouse
-ExecStart=/home/lighthouse/bin/lighthouse vc --metrics --graffiti "BokkyPooBah wuz here!"
-
-[Install]
-WantedBy=default.target
-```
-
-Reload the sysmtemd configuration files
-
-```
-sudo systemctl daemon-reload
-```
-
-Enable The Lighthouse (Validator) Service
-
-```
-sudo systemctl enable lighthouse_validator
-```
-
-Start The Lighthouse (Validator) Service
-
-```
-sudo systemctl start lighthouse_validator
-```
-
-Check the logs for the Lighthouse (Validator) Service
-
-```
-journalctl -f -u lighthouse_validator
-```
-
-Hit ^C to exit
 
 ## TODO BELOW
 
