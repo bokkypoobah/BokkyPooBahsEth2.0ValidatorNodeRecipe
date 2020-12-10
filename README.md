@@ -726,10 +726,6 @@ Then:
 
 Set up the data source from the configuration icon. Select Prometheus.
 
-# does not work
-# geth --metrics
-# curl localhost:6060/metrics
-
 <br />
 
 <hr />
