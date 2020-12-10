@@ -20,7 +20,7 @@ Other references, including different eth1 and eth2 clients:
 * [Operating System](#operating-system)
 * [Install Go Ethereum](#install-go-ethereum)
 * [Install Lighthouse](#install-lighthouse)
-* [Install Prometheus, Pushgateway, Node Exporter And Grafana](#install-prometheus--pushgateway--node-exporter-and-grafana)
+* [Install Prometheus, Pushgateway, Node Exporter And Grafana](#install-prometheus-pushgateway-node-exporter-and-grafana)
 
 <br />
 
